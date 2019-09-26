@@ -63,8 +63,6 @@ ENV CONF default
 
 ADD conf/goesrecv.conf $HOME/
 ADD conf/goesproc.conf $HOME/
-RUN mkdir share
-ADD share/ $HOME/share
 ADD bin/run.sh $HOME/
 RUN chmod 755 $HOME/run.sh
 
