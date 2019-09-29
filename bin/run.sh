@@ -1,5 +1,7 @@
 #!/usr/bin/env bash
 
+telegraf --config /etc/telegraf/telegraf.conf --quiet &
+
 # HOME=/home/weewx is set by the Dockerfile but can be overridden in run command
 echo "using $CONF"
 

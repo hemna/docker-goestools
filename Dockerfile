@@ -6,7 +6,6 @@ ENV HOME=/home/goes
 ENV BRANCH="master"
 
 ENV INSTALL=$HOME/install
-
 RUN apt-get -y update
 ENV DEBIAN_FRONTEND=noninteractive
 RUN apt-get install -y apt-utils pkg-config
@@ -14,15 +13,12 @@ RUN apt-get install -y build-essential libusb-1.0 cmake
 RUN apt-get install -y wget python3 python3-pip git-core
 RUN apt-get install -y --no-install-recommends libopencv-dev
 RUN apt-get install -y libproj-dev
-#RUN apt-get install -y zlib1g-dev
-#RUN apt-get install -y \
-#  wget curl \
-#  build-essential \
-#  cmake \
-#  git-core \
-#  libopencv-dev \
-#  zlib1g-dev
-
+RUN apt-get install -y systemd
+RUN wget -qO- https://repos.influxdata.com/influxdb.key | apt-key add -
+RUN echo "deb https://repos.influxdata.com/debian stretch stable" | tee /etc/apt/sources.list.d/influxdb.list
+RUN apt-get -y update
+RUN apt-get install -y telegraf sudo
+ADD conf/telegraf.conf /etc/telegraf
 
 # Setup Timezone
 # ENV TZ=US/Eastern
@@ -60,6 +56,9 @@ RUN cd $INSTALL/goestools/build && make && make install
 
 # override this to run another configuration
 ENV CONF default
+
+RUN addgroup --gid 1000 goes
+RUN useradd -m -u 1000 -g 1000 goes
 
 ADD conf/goesrecv.conf $HOME/
 ADD conf/goesproc.conf $HOME/
