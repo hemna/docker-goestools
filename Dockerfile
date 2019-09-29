@@ -1,4 +1,4 @@
-FROM ubuntu:18.10
+FROM ubuntu:18.10 as GOESproc
 MAINTAINER Walter A. Boring IV <waboring@hemna.com>
 
 ENV VERSION=1.0.0
@@ -7,31 +7,32 @@ ENV BRANCH="master"
 
 ENV INSTALL=$HOME/install
 RUN apt-get -y update
-ENV DEBIAN_FRONTEND=noninteractive
-RUN apt-get install -y apt-utils pkg-config
-RUN apt-get install -y build-essential libusb-1.0 cmake
-RUN apt-get install -y wget python3 python3-pip git-core
-RUN apt-get install -y --no-install-recommends libopencv-dev
-RUN apt-get install -y libproj-dev
-RUN apt-get install -y systemd
+RUN apt-get install -y wget gnupg
 RUN wget -qO- https://repos.influxdata.com/influxdb.key | apt-key add -
 RUN echo "deb https://repos.influxdata.com/debian stretch stable" | tee /etc/apt/sources.list.d/influxdb.list
 RUN apt-get -y update
-RUN apt-get install -y telegraf sudo
+ENV DEBIAN_FRONTEND=noninteractive
+RUN apt-get install -y apt-utils pkg-config sudo
+RUN apt-get install -y build-essential libusb-1.0 cmake git-core
+#RUN apt-get install -y python3 python3-pip
+RUN apt-get install -y --no-install-recommends libopencv-dev
+RUN apt-get install -y libproj-dev
+RUN apt-get install -y telegraf
+
+# Add the telegraf.conf
 ADD conf/telegraf.conf /etc/telegraf
 
 # Setup Timezone
-# ENV TZ=US/Eastern
-# RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
-# RUN apt-get install -y tzdata
-# RUN dpkg-reconfigure --frontend noninteractive tzdata
+ENV TZ=US/Eastern
+RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
+RUN apt-get install -y tzdata
+RUN dpkg-reconfigure --frontend noninteractive tzdata
 
 # Create directory to hold some of the install files.
 RUN mkdir $HOME && chmod 777 $HOME && cd $HOME && mkdir install
 
 #RUN cd $INSTALL && wget https://bootstrap.pypa.io/get-pip.py && python3 get-pip.py
 RUN pip3 install -U pip setuptools wheel
-#RUN pip3 install pyephem paho-mqtt python-cjson
 
 # install librtlsdr from source
 RUN cd $INSTALL && git clone https://github.com/steve-m/librtlsdr
