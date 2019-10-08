@@ -14,7 +14,6 @@ RUN apt-get -y update
 ENV DEBIAN_FRONTEND=noninteractive
 RUN apt-get install -y apt-utils pkg-config sudo
 RUN apt-get install -y build-essential libusb-1.0 cmake git-core
-#RUN apt-get install -y python3 python3-pip
 RUN apt-get install -y --no-install-recommends libopencv-dev
 RUN apt-get install -y libproj-dev
 RUN apt-get install -y telegraf
@@ -32,7 +31,7 @@ RUN dpkg-reconfigure --frontend noninteractive tzdata
 RUN mkdir $HOME && chmod 777 $HOME && cd $HOME && mkdir install
 
 #RUN cd $INSTALL && wget https://bootstrap.pypa.io/get-pip.py && python3 get-pip.py
-RUN pip3 install -U pip setuptools wheel
+#RUN pip3 install -U pip setuptools wheel
 
 # install librtlsdr from source
 RUN cd $INSTALL && git clone https://github.com/steve-m/librtlsdr
@@ -66,11 +65,7 @@ ADD conf/goesproc.conf $HOME/
 ADD bin/run.sh $HOME/
 RUN chmod 755 $HOME/run.sh
 
-# Syslog to split out weewx logs to it's own log file
-#RUN ln -s $HOME/util/rsyslog.d/weewx.conf /etc/rsyslog.d/10-weewx.conf
-RUN mkdir $HOME/logs
-
 WORKDIR $HOME
-EXPOSE 80
+RUN mkdir $HOME/logs
 
 CMD $HOME/run.sh
