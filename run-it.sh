@@ -3,5 +3,5 @@
 docker run -d --name goestools \
     --hostname goestools \
     --user $(id -u):$(id -g) \
-    -v /home/waboring/docker/goestools/data:/home/goes/data \
+    -v /opt/docker/goestools/data:/home/goes/data \
     hemna/goestools

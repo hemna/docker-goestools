@@ -1,0 +1,15 @@
+version: '3.4'
+
+services:
+    goestools:
+        build:
+            context: .
+            args:
+              UID: 1000
+              GID: 1000
+        container_name: goestools
+        user: 1000:1000
+        hostname: goestools
+        restart: unless-stopped
+        volumes:
+            - /opt/docker/goestools/data:/home/goes/data
