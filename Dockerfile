@@ -1,4 +1,4 @@
-FROM ubuntu:18.10 as GOESproc
+FROM ubuntu:18.04 as GOESproc
 MAINTAINER Walter A. Boring IV <waboring@hemna.com>
 
 ENV VERSION=1.0.0
@@ -58,7 +58,7 @@ RUN cd $INSTALL/goestools/build && make && make install
 ENV CONF default
 
 RUN addgroup --gid 1000 goes
-RUN useradd -m -u 1000 -g 1000 goes
+RUN useradd -m -u 1000 -g 1000 -p goes goes
 
 ADD conf/goesrecv.conf $HOME/
 ADD conf/goesproc.conf $HOME/
