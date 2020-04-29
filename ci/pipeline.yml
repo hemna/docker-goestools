@@ -1,0 +1,67 @@
+---
+resource_types:
+    - name: hangouts-resource
+      type: docker-image
+      source:
+          repository: cloudinn/concourse-hangouts-resource
+          tag: latest
+          post_url: true
+
+resources:
+  - name: goestools-src
+    type: git
+    source:
+      uri: https://github.com/hemna/docker-goestools
+
+  - name: goestools-docker-image
+    type: registry-image
+    source:
+        repository: 192.168.1.3:5000/hemna/goestools
+        tag: latest
+        insecure_registries: [ "192.168.1.3:5000" ]
+
+  - name: hangouts-chat
+    type: hangouts-resource
+    source:
+        webhook_url: <get webook url from google hangouts chat>
+        post_url: true
+
+jobs:
+  - name: build-and-publish-goestools
+    public: true
+    serial: true
+    plan:
+      - get: goestools-src
+        trigger: true
+      - task: build
+        privileged: true
+        config:
+            platform: linux
+
+            image_resource:
+                type: registry-image
+                source:
+                    repository: vito/oci-build-task
+
+            inputs:
+            - name: goestools-src
+              path: .
+            outputs:
+            - name: image
+            run: {path: build}
+
+      - put: goestools-docker-image
+        params: {image: image/image.tar}
+
+    on_failure:
+        try:
+            put: hangouts-chat
+            params:
+                message: Building the latest goestools docker image FUCKING FAILED BITCH!  HAHAHAH!!
+
+    on_success:
+        try:
+            put: hangouts-chat
+            params:
+                message: New goestools image up bitch!
+                post_url: false
