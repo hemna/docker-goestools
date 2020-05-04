@@ -22,8 +22,8 @@ resources:
     type: docker-image
     source:
         repository: 192.168.1.3:5000/hemna/goestools
-        username: (( private-reg-user ))
-        password: (( private-reg-password ))
+        username: ((private-reg-user))
+        password: ((private-reg-password))
         tag: latest
         debug: true
         insecure_registries: [ "192.168.1.3:5000" ]
@@ -31,7 +31,7 @@ resources:
   - name: hangouts-chat
     type: hangouts-resource
     source:
-        webhook_url: (( hangouts-chat-webhook-url ))
+        webhook_url: ((hangouts-chat-webhook-url))
         post_url: true
 
 jobs:
