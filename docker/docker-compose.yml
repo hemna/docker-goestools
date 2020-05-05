@@ -9,3 +9,9 @@ services:
         restart: unless-stopped
         volumes:
             - /opt/docker/goestools/data:/home/goes/data
+        networks:
+            - goestools_net
+
+networks:
+    goestools_net:
+
