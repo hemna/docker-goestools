@@ -13,7 +13,7 @@ if [ ! -f credentials.yml ]; then
 fi
 
 pushd $DIR
-  fly -t ${fly_target} set-pipeline -p goes -c pipeline.yml -l credentials.yml
-  fly -t ${fly_target} unpause-pipeline -p goes
-  fly -t ${fly_target} trigger-job -w -j goes/build-and-publish-goestools
+  fly -t ${fly_target} set-pipeline -p docker-goestools -c pipeline.yml -l credentials.yml
+  fly -t ${fly_target} unpause-pipeline -p docker-goestools
+  fly -t ${fly_target} trigger-job -w -j docker-goestools/build-and-publish-goestools
 popd
