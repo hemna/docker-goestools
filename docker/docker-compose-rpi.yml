@@ -1,0 +1,19 @@
+version: '3.4'
+
+services:
+    goestools:
+        image: hemna/goestools
+        container_name: goestools
+        user: 1000:1000
+        hostname: goestools
+        restart: unless-stopped
+        ports:
+            - 5004:5004
+            - 6001:6001
+            - 6002:6002
+        networks:
+            - goestools_net
+
+networks:
+    goestools_net:
+
