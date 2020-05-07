@@ -6,11 +6,14 @@ services:
         container_name: goestools
         user: 1000:1000
         hostname: goestools
+        privileged: true
         restart: unless-stopped
         ports:
             - 5004:5004
             - 6001:6001
             - 6002:6002
+        volumes:
+            - /dev:/dev
         networks:
             - goestools_net
 
