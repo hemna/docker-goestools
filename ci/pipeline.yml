@@ -1,17 +1,15 @@
 ---
 resource_types:
-    - name: hangouts-resource
-      type: docker-image
-      source:
-          repository: cloudinn/concourse-hangouts-resource
-          tag: latest
-          post_url: true
-
     - name: docker-compose
       type: docker-image
       source:
           repository: troykinsella/concourse-docker-compose-resource
           tag: latest
+
+    - name: slack-alert
+      type: docker-image
+      source:
+        repository: arbourd/concourse-slack-alert-resource
 
 resources:
   - name: goestools-src
@@ -39,11 +37,11 @@ resources:
     source:
         host: 192.168.1.44
 
-  - name: hangouts-chat
-    type: hangouts-resource
+  - name: slack-notify
+    type: slack-alert
     source:
-        webhook_url: ((hangouts-chat-webhook-url))
-        post_url: true
+        url: https://hooks.slack.com/services/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
+
 
 jobs:
   - name: README
@@ -77,15 +75,14 @@ jobs:
             build: docker-goestools-src/build/
     on_failure:
         try:
-            put: hangouts-chat
+            put: slack-notify
             params:
-                message: Building the latest goestools docker image FUCKING FAILED BITCH!  HAHAHAH!!
+              alert_type: failed
     on_success:
         try:
-            put: hangouts-chat
+            put: slack-notify
             params:
-                message: New goestools image up bitch!
-                post_url: false
+              alert_type: success
 
 
   - name: restart-container
@@ -106,13 +103,12 @@ jobs:
 
     on_failure:
         try:
-            put: hangouts-chat
+            put: slack-notify
             params:
-                message: Failed to restart goestools BITCH Check that shit!
+              alert_type: failed
 
     on_success:
         try:
-            put: hangouts-chat
+            put: slack-notify
             params:
-                message: New goestools container restarted! bitch!
-                post_url: false
+              alert_type: success
