@@ -40,7 +40,7 @@ resources:
   - name: slack-notify
     type: slack-alert
     source:
-        url: https://hooks.slack.com/services/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
+        url: ((slack-alerts-webhook-url))
 
 
 jobs:
