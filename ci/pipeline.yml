@@ -25,12 +25,12 @@ resources:
   - name: goestools-docker-image
     type: docker-image
     source:
-        repository: 192.168.1.3:5000/hemna/goestools
+        repository: harbor.hemna.com/hemna6969/goestools
         username: ((private-reg-user))
         password: ((private-reg-password))
         tag: latest
         debug: true
-        insecure_registries: [ "192.168.1.3:5000" ]
+        insecure_registries: [ "harbor.hemna.com" ]
 
   - name: docker-compose
     type: docker-compose

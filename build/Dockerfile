@@ -8,18 +8,18 @@ ENV BRANCH="master"
 ENV INSTALL=$HOME/install
 RUN apt-get -y update
 RUN apt-get install -y wget gnupg
-RUN wget -qO- https://repos.influxdata.com/influxdb.key | apt-key add -
-RUN echo "deb https://repos.influxdata.com/debian stretch stable" | tee /etc/apt/sources.list.d/influxdb.list
-RUN apt-get -y update
+#RUN wget -qO- https://repos.influxdata.com/influxdb.key | apt-key add -
+#RUN echo "deb https://repos.influxdata.com/debian stretch stable" | tee /etc/apt/sources.list.d/influxdb.list
+#RUN apt-get -y update
 ENV DEBIAN_FRONTEND=noninteractive
 RUN apt-get install -y apt-utils pkg-config sudo
 RUN apt-get install -y build-essential libusb-1.0 cmake git-core
 RUN apt-get install -y --no-install-recommends libopencv-dev
 RUN apt-get install -y libproj-dev
-RUN apt-get install -y telegraf
+#RUN apt-get install -y telegraf
 
 # Add the telegraf.conf
-ADD conf/telegraf.conf /etc/telegraf
+#ADD conf/telegraf.conf /etc/telegraf
 
 # Setup Timezone
 ENV TZ=US/Eastern
